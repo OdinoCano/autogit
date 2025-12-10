@@ -1,0 +1,37 @@
+{
+    "projects": {
+        "example-project-1": {
+            "path": "/path/to/your/project1",
+            "syncs": [
+                {
+                    "remote": "origin",
+                    "remote_branch": "main",
+                    "local_branch": "main"
+                },
+                {
+                    "remote": "upstream",
+                    "remote_branch": "develop",
+                    "local_branch": "develop"
+                }
+            ]
+        },
+        "example-project-2": {
+            "path": "/path/to/your/project2",
+            "remote": "origin",
+            "remote_branch": "main",
+            "local_branch": "main"
+        },
+        "example-project-3": {
+            "path": "/path/to/your/project3",
+            "remote": "origin",
+            "remote_branch": "staging",
+            "local_branch": "staging"
+        }
+    },
+    "schedule": [
+        "09:00",
+        "12:00",
+        "15:00"
+    ],
+    "work_days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+}

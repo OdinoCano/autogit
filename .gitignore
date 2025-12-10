@@ -32,3 +32,4 @@ Thumbs.db
 
 # Directories for logs (si no quieres subir los logs)
 git_autopull_logs/
+\n# Configuración local\ngit_automation_config.json
