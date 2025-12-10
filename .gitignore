@@ -30,6 +30,7 @@ Thumbs.db
 # Environment variables
 .env
 
-# Directories for logs (si no quieres subir los logs)
+# Directories for logs
 git_autopull_logs/
-\n# Configuración local\ngit_automation_config.json
+# Configuración local
+git_automation_config.json
