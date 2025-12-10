@@ -21,7 +21,7 @@ Herramienta de automatización para mantener actualizados múltiples repositorio
 
 1. Clona el repositorio:
    ```bash
-   git clone https://github.com/tu-usuario/autogit.git
+   git clone https://github.com/OdinoCano/autogit.git
    cd autogit
    ```
 
