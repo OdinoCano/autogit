@@ -3,6 +3,30 @@
 # Make the Python script executable
 chmod +x git_auto_pull.py
 
+# Instalar libnotify para notificaciones del sistema
+echo "Verificando dependencias de notificaciones..."
+if command -v apt-get &> /dev/null; then
+    # Debian/Ubuntu
+    sudo apt-get install -y libnotify-bin 2>/dev/null || echo "libnotify ya instalado o no se pudo instalar"
+elif command -v dnf &> /dev/null; then
+    # Fedora/RHEL
+    sudo dnf install -y libnotify 2>/dev/null || echo "libnotify ya instalado o no se pudo instalar"
+elif command -v pacman &> /dev/null; then
+    # Arch Linux
+    sudo pacman -S --noconfirm libnotify 2>/dev/null || echo "libnotify ya instalado o no se pudo instalar"
+elif command -v zypper &> /dev/null; then
+    # openSUSE
+    sudo zypper install -y libnotify-tools 2>/dev/null || echo "libnotify ya instalado o no se pudo instalar"
+fi
+
+# Verificar que notify-send está disponible
+if command -v notify-send &> /dev/null; then
+    echo "✓ notify-send está disponible para notificaciones del sistema"
+else
+    echo "⚠ notify-send no está disponible. Las notificaciones del sistema no funcionarán."
+    echo "  Instala libnotify manualmente según tu distribución."
+fi
+
 # Create log directory
 LOG_DIR="$HOME/git_auto_pull_logs"
 mkdir -p "$LOG_DIR"

@@ -8,12 +8,19 @@ Herramienta de automatización para mantener actualizados múltiples repositorio
 - Configuración mediante archivo JSON
 - Soporte para Linux (systemd) y Windows (Tareas Programadas)
 - Registro de actividades en archivo de log
+- **Notificaciones del sistema operativo** para alertar sobre:
+  - ✅ Sincronizaciones exitosas
+  - ⚠️ Conflictos de merge que requieren intervención manual
+  - ❌ Errores de fetch, checkout o merge
 
 ## Requisitos
 
 - Python 3.6 o superior
 - Git
 - Permisos de administrador para configurar tareas programadas (Windows) o servicios systemd (Linux)
+- **Linux**: `libnotify` (notify-send) para notificaciones del sistema
+- **macOS**: Soporte nativo via osascript
+- **Windows**: PowerShell para notificaciones toast
 
 ## Instalación
 
@@ -76,6 +83,35 @@ systemctl status git-autopull
 ```bash
 tail -f ~/git_auto_pull_logs/git_autopull.log
 ```
+
+## Notificaciones del Sistema
+
+AutoGit envía notificaciones nativas del sistema operativo para mantenerte informado:
+
+| Evento | Notificación |
+|--------|-------------|
+| Sincronización exitosa | ✅ Resumen de operaciones completadas |
+| Conflicto de merge | ⚠️ Alerta con detalles del conflicto |
+| Error de fetch/checkout | ❌ Error con información del problema |
+
+### Instalación de dependencias de notificaciones
+
+**Linux (Debian/Ubuntu):**
+```bash
+sudo apt-get install libnotify-bin
+```
+
+**Linux (Fedora/RHEL):**
+```bash
+sudo dnf install libnotify
+```
+
+**Linux (Arch):**
+```bash
+sudo pacman -S libnotify
+```
+
+**macOS y Windows:** No requieren instalación adicional.
 
 ## Licencia
 
