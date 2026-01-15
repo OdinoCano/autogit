@@ -93,7 +93,7 @@ def is_work_hours(config):
 
 def check_merge_conflicts(project_path):
     """
-    Verifica si hay conflictos de merge pendientes.
+    Verifica si hay conflictos pendientes después del pull.
     """
     try:
         result = subprocess.run(
@@ -107,8 +107,8 @@ def check_merge_conflicts(project_path):
 
 def git_pull(project_path, remote, remote_branch, local_branch):
     """
-    Hace fetch del remoto y merge de remote_branch hacia local_branch.
-    Ejemplo: git fetch Luis && git checkout main && git merge Luis/mongo
+    Hace fetch del remoto y pull (sin rebase) de remote_branch hacia local_branch.
+    Ejemplo: git fetch Luis && git checkout main && git pull --no-rebase Luis mongo
     Retorna: (success: bool, message: str, has_conflicts: bool)
     """
     project_name = os.path.basename(project_path)
@@ -155,10 +155,10 @@ def git_pull(project_path, remote, remote_branch, local_branch):
             )
             return False, error_msg, False
         
-        # Merge de la rama remota
-        print(f"Haciendo merge de {remote}/{remote_branch} -> {local_branch}...")
+        # Pull de la rama remota (sin rebase)
+        print(f"Haciendo pull --no-rebase de {remote}/{remote_branch} -> {local_branch}...")
         result = subprocess.run(
-            ['git', 'merge', f'{remote}/{remote_branch}'],
+            ['git', 'pull', '--no-rebase', remote, remote_branch],
             capture_output=True, text=True
         )
         print(result.stdout)
@@ -166,11 +166,11 @@ def git_pull(project_path, remote, remote_branch, local_branch):
         # Verificar si hay conflictos
         if result.returncode != 0 or 'CONFLICT' in result.stdout or 'CONFLICT' in result.stderr:
             conflicts = check_merge_conflicts(project_path)
-            conflict_msg = f"Conflictos en merge de {remote}/{remote_branch}\nArchivos: {conflicts[:150] if conflicts else 'desconocido'}..."
+            conflict_msg = f"Conflictos en pull de {remote}/{remote_branch}\nArchivos: {conflicts[:150] if conflicts else 'desconocido'}..."
             print(f"⚠ CONFLICTO DETECTADO: {conflict_msg}")
             send_notification(
                 f"⚠️ AutoGit - CONFLICTO en {project_name}",
-                f"Se detectaron conflictos de merge.\nRama: {remote}/{remote_branch} -> {local_branch}\nRequiere intervención manual.",
+                f"Se detectaron conflictos de pull.\nRama: {remote}/{remote_branch} -> {local_branch}\nRequiere intervención manual.",
                 NotificationType.WARNING
             )
             return False, conflict_msg, True
@@ -184,7 +184,7 @@ def git_pull(project_path, remote, remote_branch, local_branch):
             )
             
         print("✓ Completado")
-        return True, "Merge completado exitosamente", False
+        return True, "Pull completado exitosamente", False
                 
     except subprocess.CalledProcessError as e:
         error_msg = f"Error de Git: {str(e)}"
